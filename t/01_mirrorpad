@@ -1,0 +1,17 @@
+#!/bin/bash
+
+if test "$TRAVIS" = "true";
+then
+  URL_FILE=url_test.pub.txt
+else
+  URL_FILE=url_test.priv.txt
+fi
+
+if test -r "$URL_FILE";
+then
+  cat "$URL_FILE" | xargs -n1 carton exec ../mirrorpad.pl
+else
+  echo "'$URL_FILE' introuvable"
+  exit 1
+fi
+
