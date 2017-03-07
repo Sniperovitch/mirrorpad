@@ -5,7 +5,7 @@ perl:
 before_install:
   - "cp -v mirrorpad.yml.smp mirrorpad.yml"
   - sudo apt-get -qq update
-  - sudo apt-get instal -y libconfig-yaml-perl libwww-perl liblwp-protocol-https-perl libencode-perl liburi-encode-perl
+  - sudo apt-get install -y libconfig-yaml-perl libwww-perl liblwp-protocol-https-perl libencode-perl liburi-encode-perl
 notifications:
   irc: "chat.freenode.net#pressecitron"
 script:
