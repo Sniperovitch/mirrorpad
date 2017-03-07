@@ -21,12 +21,14 @@ my $pad_content;
 if($pad_url =~ m{\Q$pad_base/group.html}) {
     my $api_key = $config->get_apikey or die "apikey is missing in config file ?";
     $pad_content = get_private_pad($pad_url, $pad_base, $api_key);
-    exit 1 if not defined $pad_content;
 }
 else {
     $pad_content = get_public_pad($pad_url);
 }
-print $pad_content;
+
+exit 1 if not defined $pad_content;
+print Encode::encode('UTF-8', $pad_content);
+exit 0;
 
 sub get_private_pad {
     require Etherpad;
@@ -43,7 +45,6 @@ sub get_private_pad {
     ($pad_id) = $pad_url =~ m{^$pad_base/.+?/(g\.[^/]+)}o;
     warn "PADID=$pad_id\n";
     if(my($pad_text) = $ep->get_text($pad_id)) {
-        $pad_text = Encode::encode('UTF-8', $pad_text);
         return $pad_text;
     }
     else {
