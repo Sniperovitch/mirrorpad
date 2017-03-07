@@ -4,8 +4,6 @@ perl:
   - "5.24"
 before_install:
   - "cp -v mirrorpad.yml.smp mirrorpad.yml"
-  - cpanm Carton
-  - carton install
 notifications:
   irc: "chat.freenode.net#pressecitron"
 script:

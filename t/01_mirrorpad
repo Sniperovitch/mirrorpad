@@ -9,7 +9,7 @@ fi
 
 if test -r "$URL_FILE";
 then
-  cat "$URL_FILE" | xargs -n1 carton exec ../mirrorpad.pl
+  cat "$URL_FILE" | xargs -n1 ../mirrorpad
 else
   echo "'$URL_FILE' introuvable"
   exit 1
