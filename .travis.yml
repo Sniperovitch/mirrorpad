@@ -4,8 +4,7 @@ perl:
   - "5.24"
 before_install:
   - "cp -v mirrorpad.yml.smp mirrorpad.yml"
-  - sudo apt-get -qq update
-  - sudo apt-get install -y libconfig-yaml-perl libwww-perl liblwp-protocol-https-perl libencode-perl liburi-encode-perl
+  - ./build.sh
 notifications:
   irc:
     channels:
