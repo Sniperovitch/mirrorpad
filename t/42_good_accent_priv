@@ -1,6 +1,6 @@
 #!/bin/bash
 
-printf "$PRINTFPATTERN" $0 : "URL Simple, privée, bien formée, sans accent."
+printf "$PRINTFPATTERN" $0 : "URL Simple, privée, bien formée, avec accent."
 
 if test "$TRAVIS" == "true";
 then
