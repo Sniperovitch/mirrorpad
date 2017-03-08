@@ -6,9 +6,9 @@ printf "$PRINTFPATTERN" $0 : "Test avec une URL volontairement malformée. "
 URL=https%3A%2F%2Fpad.exegetes.eu.org%2Fgroup.html%2F19%2Fpad.html%2Fg.WnA83RsmVUC%24%C3%83%C2%B4%C3%83%C2%B4
 
 
-./mirrorpad "$URL" 2>/dev/null;
+OUTPUT=$(./mirrorpad "$URL" 2>&1 >/dev/null)
 RC=$?
-
+echo -n "RC=$RC "
 if test "$RC" -eq "0";
 then
   # Test raté
@@ -18,6 +18,7 @@ else
   echo "RC=$RC [  OK  ]"
   RC=0
 fi
+echo "$OUTPUT"
 
 exit "$RC"
 

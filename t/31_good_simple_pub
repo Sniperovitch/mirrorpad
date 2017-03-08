@@ -4,9 +4,9 @@ printf "$PRINTFPATTERN" $0 : "URL Simple, bien formée, sans accent."
 
 URL=https%3A%2F%2Fpad.exegetes.eu.org%2Fp%2Fg.DSXI1kGFT1gjor66%24Abro-REP-Tele2-Principal
 
-./mirrorpad "$URL" >/dev/null 2>/dev/null;
+OUTPUT=$(./mirrorpad "$URL" 2>&1 >/dev/null)
 RC=$?
-
+echo -n "RC=$RC "
 if test "$RC" -ne "0";
 then
   # Test raté
@@ -14,6 +14,6 @@ then
 else
   echo "RC=$RC [  OK  ]"
 fi
-
+echo "$OUTPUT"
 exit "$RC"
 
