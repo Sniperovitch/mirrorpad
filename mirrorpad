@@ -1,0 +1,126 @@
+#!/usr/bin/env perl 
+# vim: syntax=perl tabstop=4 shiftwidth=4 set expandtab softtabstop=4
+use strict;
+use warnings;
+use Config::YAML;
+use Data::Dumper;
+use Encode ();
+use URI::Encode ();
+use subs ('verbose', 'warning','error');
+
+use constant E_FILE_NOTFOUND   => q{Le fichier '%s' est introuvable};
+use constant E_CONF_LOADER     => q{Erreur lors du chargement de la configuration '%s'};
+use constant E_CONF_KEYMISSING => q{La clé '%s' est manquante dans le fichier de configuration '%s'};
+use constant E_EPAD_LOADER     => q{Erreur lors du chargement de Etherpad};
+use constant E_PADURL_PARSE    => q{Erreur lors du parsing de l'url du pad '%s'};
+
+use constant RC_OK    => 0;
+use constant RC_ERROR => 1;
+
+
+my %conf = load_configuration();
+verbose "API_URL: %s", $conf{apiurl};
+my $pad_url = Encode::decode('UTF-8', URI::Encode::uri_decode(shift) );
+verbose "PAD_URL: %s", $pad_url;
+
+my $pad_content;
+if($pad_url =~ m{\Q$conf{apiurl}\E/group\.html}) {
+    verbose "PAD_TYPE: %s", 'PRIVATE';
+    $pad_content = get_private_pad($pad_url, $conf{apiurl}, $conf{apikey});
+}
+else {
+    verbose "PAD_TYPE: %s", 'PUBLIC';
+    $pad_content = get_public_pad($pad_url);
+}
+
+exit RC_ERROR if not defined $pad_content;
+verbose "PAD_SIZE: %d", length $pad_content;
+print Encode::encode('UTF-8', $pad_content);
+exit RC_OK;
+
+
+
+
+
+sub warning {
+    my $template = shift;
+    printf STDERR Encode::encode('UTF-8', sprintf("$template\n", @_));
+}
+
+sub error {
+    warning(@_);
+    exit RC_ERROR;
+}
+
+sub verbose {
+    if(exists $conf{verbose} and $conf{verbose} =~ /^(?: 1 | true )$/ix) {
+        # on utilise STDERR pour ne pas interferer avec le contenu des pads sur la sortie standard
+        warning @_;
+    }
+}
+
+sub load_configuration {
+    # Fichier de configuration
+    my $config_file = $0;
+    $config_file =~ s/(?:\.pl)?$/.yml/;
+    if(not -r $config_file) {
+        error E_FILE_NOTFOUND, $config_file;
+    }
+    my $config = Config::YAML->new(config => $config_file) or error E_CONF_LOADER, $config_file;
+    my $apiurl  = $config->get_apiurl  or error E_CONF_KEYMISSING, 'apiurl', $config_file;
+    my $apikey  = $config->get_apikey  or error E_CONF_KEYMISSING, 'apikey', $config_file;
+    my $verbose = $config->get_verbose or error E_CONF_KEYMISSING, 'verbose', $config_file;
+    return (
+        apiurl  => $apiurl,
+        apikey  => $apikey,
+        verbose => $verbose,
+    );
+}
+
+
+
+sub get_private_pad {
+    require Etherpad;
+    my ($pad_url, $api_url, $api_key) = @_;
+    my $ep = Etherpad->new(url => $api_url, apikey => $api_key) or error E_EPAD_LOADER;
+
+    # Extraction de l'id du pad à partir de l'url du pad
+    my $pad = _parse_pad_url($pad_url) or error E_PADURL_PARSE, $pad_url;
+    my $pad_id = Encode::decode('UTF-8', $pad->{padid});
+    verbose "PADID: %s", $pad_id;
+
+    if(my($pad_text) = $ep->get_text($pad_id)) {
+        return $pad_text;
+    }
+    else {
+        return;
+    }
+}
+
+sub _parse_pad_url {
+    my $url = shift;
+    my $RE_groupid = qr/ g\..{16} /x;
+    my $RE_padname = qr{ [^/]+    }x;
+
+    if( my ($pad_base, $group_id, $pad_name) = $url =~ m{^(\Q$conf{apiurl}\E)/.*?($RE_groupid)\$($RE_padname)}oxu ) {
+        return {padbase => $pad_base, groupid => $group_id, padname => $pad_name, padid => "$group_id\$$pad_name"};
+    }
+    else {
+        return;
+    }
+}
+
+sub get_public_pad {
+    require LWP::UserAgent;
+    my ($pad_url) = @_;
+    my $ua = LWP::UserAgent->new;
+    my $resp = $ua->get($pad_url);
+    if($resp->is_success) {
+        return $resp->decoded_content;
+    }
+    else {
+        warn $resp->status_line;
+        return
+    }
+}
+
