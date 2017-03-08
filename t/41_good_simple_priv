@@ -8,7 +8,7 @@ then
   exit 0
 fi
 
-URL=$(tail -n1 url_test.priv.txt)
+URL=https%3A%2F%2Fpad.exegetes.eu.org%2Fgroup.html%2F19%2Fpad.html%2Fg.STVKtWnA83RsmVUC%24Abro2Garde-PRIVE
 
 OUTPUT=$(./mirrorpad "$URL" 2>&1 >/dev/null)
 RC=$?
