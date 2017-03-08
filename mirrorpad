@@ -6,6 +6,9 @@ use Config::YAML;
 use Data::Dumper;
 use Encode ();
 use URI::Encode ();
+use LWP::UserAgent;
+use Etherpad;
+
 use subs ('verbose', 'warning','error');
 
 use constant E_FILE_NOTFOUND   => q{Le fichier '%s' est introuvable};
@@ -80,7 +83,6 @@ sub load_configuration {
 
 
 sub get_private_pad {
-    require Etherpad;
     my ($pad_url, $api_url, $api_key) = @_;
     my $ep = Etherpad->new(url => $api_url, apikey => $api_key) or error E_EPAD_LOADER;
 
@@ -111,7 +113,6 @@ sub _parse_pad_url {
 }
 
 sub get_public_pad {
-    require LWP::UserAgent;
     my ($pad_url) = @_;
     my $ua = LWP::UserAgent->new;
     my $resp = $ua->get($pad_url);
