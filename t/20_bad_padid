@@ -1,0 +1,23 @@
+#!/bin/bash
+
+printf "$PRINTFPATTERN" $0 : "Test avec une URL volontairement malformée. "
+
+# Group ID mal formé (moins de 16 caractères
+URL=https%3A%2F%2Fpad.exegetes.eu.org%2Fgroup.html%2F19%2Fpad.html%2Fg.WnA83RsmVUC%24%C3%83%C2%B4%C3%83%C2%B4
+
+
+./mirrorpad "$URL" 2>/dev/null;
+RC=$?
+
+if test "$RC" -eq "0";
+then
+  # Test raté
+  echo "RC=$RC [FAILED]"
+  RC=1
+else
+  echo "RC=$RC [  OK  ]"
+  RC=0
+fi
+
+exit "$RC"
+

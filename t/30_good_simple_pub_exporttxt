@@ -1,0 +1,19 @@
+#!/bin/bash
+
+printf "$PRINTFPATTERN" $0 : "URL Simple, bien formée, sans accent, avec export/txt."
+
+URL=https%3A%2F%2Fpad.exegetes.eu.org%2Fp%2Fg.DSXI1kGFT1gjor66%24Abro-REP-Tele2-Garde%2Fexport%2Ftxt
+
+./mirrorpad "$URL" >/dev/null 2>/dev/null;
+RC=$?
+
+if test "$RC" -ne "0";
+then
+  # Test raté
+  echo "RC=$RC [FAILED]"
+else
+  echo "RC=$RC [  OK  ]"
+fi
+
+exit "$RC"
+

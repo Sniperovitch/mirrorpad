@@ -1,0 +1,30 @@
+#!/bin/bash
+
+printf "$PRINTFPATTERN" $0 : "Test de lancement sans fichier de config"
+
+# Si un fichier de config existe on le renomme
+if test -r "mirrorpad.yml";
+then
+  mv mirrorpad.yml mirrorpad.yml.$$
+fi
+
+./mirrorpad >/dev/null 2>&1
+RC=$?
+if test "$RC" -eq "1";
+then
+  # Test reussi
+  echo "[  OK  ]"
+  RC=0
+else
+  echo "[FAILED]"
+  RC=1
+fi
+
+# On remet le fichier qui existait
+if test -r "mirrorpad.yml.$$";
+then
+  mv mirrorpad.yml.$$ mirrorpad.yml
+fi
+
+exit "$RC"
+

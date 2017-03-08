@@ -1,0 +1,16 @@
+#!/bin/bash
+
+printf "$PRINTFPATTERN" $0 : "Test de non existence des fichiers privés dans Travis."
+
+if test "$TRAVIS" = "true" -a -e "url_test.priv.txt";
+then
+  # Test raté
+  echo "[FAILED]"
+  RC=1
+else
+  echo "[  OK  ]"
+  RC=0
+fi
+
+exit "$RC"
+

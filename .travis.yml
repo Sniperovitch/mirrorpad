@@ -15,5 +15,5 @@ notifications:
       - "%{commit_message}"
     use_notice: true
 script:
-  - cd t && ./01_mirrorpad
+  - t/alltests
 

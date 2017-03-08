@@ -1,0 +1,25 @@
+#!/bin/bash
+
+printf "$PRINTFPATTERN" $0 : "URL Simple, privée, bien formée, sans accent, avec export/txt."
+
+if test "$TRAVIS" == "true";
+then
+  echo "[ SKIP ]"
+  exit 0
+fi
+
+URL=$(head -n1 url_test.priv.txt)
+
+./mirrorpad "$URL" >/dev/null 2>/dev/null;
+RC=$?
+
+if test "$RC" -ne "0";
+then
+  # Test raté
+  echo "RC=$RC [FAILED]"
+else
+  echo "RC=$RC [  OK  ]"
+fi
+
+exit "$RC"
+
