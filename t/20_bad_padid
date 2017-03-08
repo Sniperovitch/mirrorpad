@@ -12,10 +12,10 @@ echo -n "RC=$RC "
 if test "$RC" -eq "0";
 then
   # Test raté
-  echo "RC=$RC [FAILED]"
+  echo "[FAILED]"
   RC=1
 else
-  echo "RC=$RC [  OK  ]"
+  echo "[  OK  ]"
   RC=0
 fi
 echo "$OUTPUT"
