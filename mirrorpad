@@ -114,6 +114,8 @@ sub _parse_pad_url {
 
 sub get_public_pad {
     my ($pad_url) = @_;
+    $pad_url .= '/export/txt' unless $pad_url =~ m{/export/txt$};
+
     my $ua = LWP::UserAgent->new;
     my $resp = $ua->get($pad_url);
     if($resp->is_success) {
