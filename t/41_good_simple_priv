@@ -16,9 +16,9 @@ echo -n "RC=$RC "
 if test "$RC" -ne "0";
 then
   # Test raté
-  echo "RC=$RC [FAILED]"
+  echo "[FAILED]"
 else
-  echo "RC=$RC [  OK  ]"
+  echo "[  OK  ]"
 fi
 echo "$OUTPUT"
 exit "$RC"
