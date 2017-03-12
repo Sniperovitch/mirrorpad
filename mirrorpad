@@ -17,9 +17,9 @@ use constant E_CONF_KEYMISSING => q{La clé '%s' est manquante dans le fichier d
 use constant E_EPAD_LOADER     => q{Erreur lors du chargement de Etherpad};
 use constant E_PADURL_PARSE    => q{Erreur lors du parsing de l'url du pad '%s'};
 
-use constant RC_OK    => 0;
-use constant RC_ERROR => 1;
-
+use constant RC_OK      => 0;
+use constant RC_ERROR   => 1;
+use constant RC_NOTCONF => 5
 
 my %conf = load_configuration();
 verbose "API_URL: %s", $conf{apiurl};
@@ -67,7 +67,8 @@ sub load_configuration {
     my $config_file = $0;
     $config_file =~ s/(?:\.pl)?$/.yml/;
     if(not -r $config_file) {
-        error E_FILE_NOTFOUND, $config_file;
+        warning E_FILE_NOTFOUND, $config_file;
+        exit RC_NOTCONF;
     }
     my $config = Config::YAML->new(config => $config_file) or error E_CONF_LOADER, $config_file;
     my $apiurl  = $config->get_apiurl  or error E_CONF_KEYMISSING, 'apiurl', $config_file;

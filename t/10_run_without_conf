@@ -12,7 +12,7 @@ OUTPUT=$(./mirrorpad 2>&1 >/dev/null)
 RC=$?
 echo -n "RC=$RC "
 
-if test "$RC" -eq "1";
+if test "$RC" -eq "5";
 then
   # Test reussi
   echo "[  OK  ]"
