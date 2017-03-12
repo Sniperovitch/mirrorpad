@@ -17,7 +17,7 @@ do
     if test "$RC" -eq "99";
     then
       testSKIPPED=$(($testSKIPPED + 1))
-    elif test "$RS" -ne "0";
+    elif test "$RC" -ne "0";
     then
       MAXRC="$RC"
       testFAILED=$(($testFAILED + 1))
