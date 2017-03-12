@@ -19,7 +19,7 @@ use constant E_PADURL_PARSE    => q{Erreur lors du parsing de l'url du pad '%s'}
 
 use constant RC_OK      => 0;
 use constant RC_ERROR   => 1;
-use constant RC_NOTCONF => 5
+use constant RC_NOTCONF => 5;
 
 my %conf = load_configuration();
 verbose "API_URL: %s", $conf{apiurl};
