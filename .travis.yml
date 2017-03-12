@@ -12,7 +12,7 @@ notifications:
     use_notice: true
 install:
   - cp -v mirrorpad.yml.smp mirrorpad.yml
-  - cpanm --notest Config::YAML Encode URI::Encode LWP::UserAgent LWP::Protocol::https
+  - cpanm --notest Config::YAML Encode URI::Encode LWP::UserAgent LWP::Protocol::https Etherpad
 script:
   - t/alltests
 
