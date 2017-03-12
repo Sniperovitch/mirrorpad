@@ -11,7 +11,8 @@ notifications:
       - "%{commit_message}"
     use_notice: true
 install:
-  - sudo ./build.sh
+  - cp -v mirrorpad.yml.smp mirrorpad.yml
+  - sudo cpanm --notest Config::YAML Encode URI::Encode LWP::UserAgent LWP::protocol::https
 script:
   - t/alltests
 
