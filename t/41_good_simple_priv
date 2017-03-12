@@ -5,7 +5,7 @@ printf "$PRINTFPATTERN" $0 : "URL Simple, privée, bien formée, sans accent."
 if test "$TRAVIS" == "true";
 then
   echo "[ SKIP ]"
-  exit 0
+  exit 99
 fi
 
 URL=https%3A%2F%2Fpad.exegetes.eu.org%2Fgroup.html%2F19%2Fpad.html%2Fg.STVKtWnA83RsmVUC%24Abro2Garde-PRIVE
